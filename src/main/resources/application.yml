@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:mysql://refillcycle.com:3306/hycu_board
+    username: root
+    password: ENC(cyK4lgvriUCDOcntCa6ebpjYPFnMdWLd5Nx4yILVMoE=)
+    driver-class-name: com.mysql.jdbc.Driver
