@@ -14,13 +14,17 @@ public class PostResDTO {
     long like;
     String user;
 
+    @JsonProperty("comments_count")
+    long commentsCount;
+
     @JsonProperty("time_ago")
     LocalDateTime timeAgo;
 
-    public PostResDTO(Post p, long like) {
+    public PostResDTO(Post p, long like, long commentsCount) {
         id = p.getId();
         title = p.getTitle();
         contents = p.getContents();
+        this.commentsCount = commentsCount;
         user = p.getCreator().getNickname();
         this.like = like;
         timeAgo = p.getCreatedAt();

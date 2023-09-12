@@ -9,6 +9,7 @@ import java.util.List;
 
 import static hycu.board.like.QLikes.likes;
 import static hycu.board.post.QPost.post;
+import static hycu.board.reply.QReply.reply;
 
 @RequiredArgsConstructor
 public class PostDslRepoImpl implements PostDslRepo {
@@ -17,9 +18,10 @@ public class PostDslRepoImpl implements PostDslRepo {
 
     @Override
     public List<PostResDTO> findWithCreator() {
-        return factory.select(Projections.constructor(PostResDTO.class, post, likes.likeKey.user.count())).from(post)
+        return factory.select(Projections.constructor(PostResDTO.class, post, likes.likeKey.user.count(), reply.count())).from(post)
                 .leftJoin(post.creator).fetchJoin()
                 .leftJoin(likes).on(likes.likeKey.post.eq(post))
+                .leftJoin(reply).on(reply.post.eq(post))
                 .groupBy(post.id)
                 .orderBy(post.createdAt.desc())
                 .where(post.active.isTrue())
