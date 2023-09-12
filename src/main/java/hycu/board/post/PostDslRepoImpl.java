@@ -1,7 +1,10 @@
 package hycu.board.post;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import hycu.board.post.dto.PostDetailResDTO;
 import hycu.board.post.dto.PostResDTO;
 import lombok.RequiredArgsConstructor;
 
@@ -18,13 +21,29 @@ public class PostDslRepoImpl implements PostDslRepo {
 
     @Override
     public List<PostResDTO> findWithCreator() {
-        return factory.select(Projections.constructor(PostResDTO.class, post, likes.likeKey.user.count(), reply.count())).from(post)
-                .leftJoin(post.creator).fetchJoin()
-                .leftJoin(likes).on(likes.likeKey.post.eq(post))
+        JPAQuery<PostResDTO> select = factory.select(Projections.constructor(PostResDTO.class, post, likes.likeKey.user.count(), reply.count()));
+        return getBaseQuery(select)
                 .leftJoin(reply).on(reply.post.eq(post))
                 .groupBy(post.id)
                 .orderBy(post.createdAt.desc())
-                .where(post.active.isTrue())
-                .fetch();
+                .where(activeIsTrue()).fetch();
+    }
+
+    @Override
+    public PostDetailResDTO findDetailById(long postId) {
+        JPAQuery<PostDetailResDTO> select = factory.select(Projections.constructor(PostDetailResDTO.class, post, likes.likeKey.user.count()));
+        return getBaseQuery(select)
+                .where(activeIsTrue().and(post.id.eq(postId)))
+                .fetchOne();
+    }
+
+    public BooleanExpression activeIsTrue() {
+        return post.active.isTrue();
+    }
+
+    public <T> JPAQuery<T> getBaseQuery(JPAQuery<T> select) {
+        return select.from(post)
+                .leftJoin(post.creator).fetchJoin()
+                .leftJoin(likes).on(likes.likeKey.post.eq(post));
     }
 }

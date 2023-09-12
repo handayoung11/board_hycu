@@ -18,5 +18,5 @@ public class Reply extends CreationBaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
 
-    String content;
+    String contents;
 }

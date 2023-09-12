@@ -45,6 +45,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         RequestMatcher[] matchers = new RequestMatcher[] {
                 new AntPathRequestMatcher("/post", "GET"),
+                new AntPathRequestMatcher("/post/{postId}", "GET"),
         };
 
         http

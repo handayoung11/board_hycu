@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 public class PostResDTO {
     long id;
     String title;
-    String contents;
     long like;
     String user;
 
@@ -23,7 +22,6 @@ public class PostResDTO {
     public PostResDTO(Post p, long like, long commentsCount) {
         id = p.getId();
         title = p.getTitle();
-        contents = p.getContents();
         this.commentsCount = commentsCount;
         user = p.getCreator().getNickname();
         this.like = like;
