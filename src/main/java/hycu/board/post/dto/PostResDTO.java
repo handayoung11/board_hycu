@@ -1,7 +1,7 @@
-package hycu.board.board.dto;
+package hycu.board.post.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import hycu.board.board.Post;
+import hycu.board.post.Post;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package hycu.board.board;
+package hycu.board.post;
 
 
 import org.springframework.data.jpa.repository.EntityGraph;

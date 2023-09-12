@@ -1,4 +1,4 @@
-package hycu.board.board;
+package hycu.board.post;
 
 import hycu.board.base_entity.CreationBaseEntity;
 import jakarta.persistence.*;

@@ -1,6 +1,6 @@
-package hycu.board.board;
+package hycu.board.post;
 
-import hycu.board.board.dto.PostResDTO;
+import hycu.board.post.dto.PostResDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
