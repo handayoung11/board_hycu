@@ -13,6 +13,6 @@ public class PostService {
     private final PostRepo postRepo;
 
     public List<PostResDTO> getPosts() {
-        return postRepo.findWithCreatorByActiveIsTrue().stream().map(p -> new PostResDTO(p)).toList();
+        return postRepo.findWithCreator();
     }
 }

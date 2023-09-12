@@ -11,19 +11,18 @@ public class PostResDTO {
     long id;
     String title;
     String contents;
-    int like;
+    long like;
     String user;
 
     @JsonProperty("time_ago")
     LocalDateTime timeAgo;
 
-    public PostResDTO(Post p) {
-        //TODO like 처리
+    public PostResDTO(Post p, long like) {
         id = p.getId();
         title = p.getTitle();
         contents = p.getContents();
         user = p.getCreator().getNickname();
-        like = 10;
+        this.like = like;
         timeAgo = p.getCreatedAt();
     }
 }
