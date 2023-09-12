@@ -1,4 +1,7 @@
 spring:
+  profiles:
+    active: dev
+
   datasource:
     url: jdbc:mysql://refillcycle.com:3306/hycu_board
     username: root
@@ -6,8 +9,13 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
 
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+        format_sql: true
 
 jwt:
   private.key: classpath:app.key
