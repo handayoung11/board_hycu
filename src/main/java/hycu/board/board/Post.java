@@ -9,11 +9,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Board extends CreationBaseEntity {
+public class Post extends CreationBaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ev_id")
     Long id;
 
+    String title;
     String contents;
+    boolean active;
 }

@@ -44,7 +44,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         RequestMatcher[] matchers = new RequestMatcher[] {
-                new AntPathRequestMatcher("/board", "GET"),
+                new AntPathRequestMatcher("/post", "GET"),
         };
 
         http
