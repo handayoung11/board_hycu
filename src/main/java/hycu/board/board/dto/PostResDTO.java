@@ -1,7 +1,10 @@
 package hycu.board.board.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import hycu.board.board.Post;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 @Getter
 public class PostResDTO {
@@ -10,7 +13,9 @@ public class PostResDTO {
     String contents;
     int like;
     String user;
-    String timeAgo;
+
+    @JsonProperty("time_ago")
+    LocalDateTime timeAgo;
 
     public PostResDTO(Post p) {
         //TODO like 처리
@@ -19,6 +24,6 @@ public class PostResDTO {
         contents = p.getContents();
         user = p.getCreator().getNickname();
         like = 10;
-        timeAgo = p.getCreatedAt().toString();
+        timeAgo = p.getCreatedAt();
     }
 }

@@ -11,5 +11,5 @@ import java.util.List;
 public interface PostRepo extends JpaRepository<Post, Long> {
 
     @EntityGraph(attributePaths = "creator")
-    List<Post> findAll();
+    List<Post> findWithCreatorByActiveIsTrue();
 }
