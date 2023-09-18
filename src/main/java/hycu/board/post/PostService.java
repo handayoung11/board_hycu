@@ -4,7 +4,9 @@ import hycu.board.post.dto.PostDetailResDTO;
 import hycu.board.post.dto.PostResDTO;
 import hycu.board.reply.ReplyRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 
@@ -20,7 +22,8 @@ public class PostService {
     }
 
     public PostDetailResDTO getPost(long postId) {
-        PostDetailResDTO dto = postRepo.findDetailById(postId);
+        PostDetailResDTO dto = postRepo.findDetailById(postId)
+                .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "존재하지 않거나 삭제된 게시글입니다."));
         dto.configComments(replyRepo.findWithCreatorByPostIdOrderByCreatedAtDesc(postId));
         return dto;
     }

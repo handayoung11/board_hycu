@@ -9,6 +9,7 @@ import hycu.board.post.dto.PostResDTO;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 import static hycu.board.like.QLikes.likes;
 import static hycu.board.post.QPost.post;
@@ -30,11 +31,17 @@ public class PostDslRepoImpl implements PostDslRepo {
     }
 
     @Override
-    public PostDetailResDTO findDetailById(long postId) {
-        JPAQuery<PostDetailResDTO> select = factory.select(Projections.constructor(PostDetailResDTO.class, post, likes.likeKey.user.count()));
-        return getBaseQuery(select)
-                .where(activeIsTrue().and(post.id.eq(postId)))
-                .fetchOne();
+    public Optional<PostDetailResDTO> findDetailById(long postId) {
+        PostDetailResDTO dto = null;
+        try {
+            JPAQuery<PostDetailResDTO> select = factory.select(Projections.constructor(PostDetailResDTO.class, post, likes.likeKey.user.count()));
+            dto = getBaseQuery(select)
+                    .where(activeIsTrue().and(post.id.eq(postId)))
+                    .fetchOne();
+        } catch(Exception e) {
+            e.fillInStackTrace();
+        }
+        return Optional.ofNullable(dto);
     }
 
     public BooleanExpression activeIsTrue() {
