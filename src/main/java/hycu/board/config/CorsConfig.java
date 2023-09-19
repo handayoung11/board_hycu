@@ -11,7 +11,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         //TODO origin 변수 설정
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:1234")
+                .allowedOrigins("http://localhost:1234", "http://localhost:3000")
                 .allowedMethods("*")
                 .allowCredentials(true);
     }

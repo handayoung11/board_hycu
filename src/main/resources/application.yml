@@ -20,3 +20,6 @@ spring:
 jwt:
   private.key: classpath:app.key
   public.key: classpath:app.pub
+
+cookie:
+  secured: false

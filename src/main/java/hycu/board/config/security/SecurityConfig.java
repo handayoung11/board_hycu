@@ -46,6 +46,7 @@ public class SecurityConfig {
         RequestMatcher[] matchers = new RequestMatcher[] {
                 new AntPathRequestMatcher("/post", "GET"),
                 new AntPathRequestMatcher("/post/{postId}", "GET"),
+                new AntPathRequestMatcher("/token/refresh", "POST"),
         };
 
         http
@@ -72,8 +73,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder;
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
