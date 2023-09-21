@@ -25,6 +25,10 @@ public class TokenController {
         configTokenCookies(token, refreshToken.getValue().toString(), resp);
     }
 
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void checkToken() {}
+
     @PostMapping("/refresh")
     public void reIssueToken(@CookieValue("refreshToken") Cookie refreshToken,
                              @CookieValue("token") Cookie accessToken,

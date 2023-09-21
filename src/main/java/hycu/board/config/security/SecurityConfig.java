@@ -50,14 +50,14 @@ public class SecurityConfig {
         };
 
         http
-                .cors(cors -> cors.disable())
+                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .requestMatchers(matchers).permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf ->
-                        csrf.ignoringRequestMatchers("/token")
+                        csrf.ignoringRequestMatchers(new AntPathRequestMatcher("/token", "POST"))
                                 .ignoringRequestMatchers(matchers)
                 )
                 .httpBasic(Customizer.withDefaults())
