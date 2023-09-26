@@ -71,7 +71,7 @@ public class TokenSvc {
         }
 
         String jti = jwt.getClaimAsString("jti");
-        RefreshToken refreshToken = refreshTokenRepo.findByValueAndJti(refreshTokenVal.replaceAll("-", ""), jti)
+        RefreshToken refreshToken = refreshTokenRepo.findByValueAndJti(refreshTokenVal, jti)
                 .orElseThrow(() -> makeHttpClientErrorEx(HttpStatus.UNAUTHORIZED, new LogoutErrRes("refreshToken is not valid")));
         if (refreshToken.isExpired()) {
             throw makeHttpClientErrorEx(HttpStatus.UNAUTHORIZED, new LogoutErrRes("refreshtoken is expired"));
@@ -79,6 +79,7 @@ public class TokenSvc {
 
         refreshToken.generate();
         String token = generateToken(jwt.getClaimAsString("rls"), jwt.getSubject(), refreshToken);
-        return new String[] {token, refreshToken.getValue().toString()};
+        return new String[] {token, refreshToken.getValueStr()};
+    }
     }
 }

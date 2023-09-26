@@ -39,4 +39,8 @@ public class RefreshToken {
     public boolean isExpired() {
         return expiryDate.isBefore(LocalDateTime.now());
     }
+
+    public String getValueStr() {
+        return value.toString().replaceAll("-", "");
+    }
 }

@@ -22,12 +22,13 @@ public class TokenController {
     public void token(Authentication auth, HttpServletResponse resp) {
         RefreshToken refreshToken = tokenSvc.generateRefreshToken();
         String token = tokenSvc.generateToken(auth, refreshToken);
-        configTokenCookies(token, refreshToken.getValue().toString(), resp);
+        configTokenCookies(token, refreshToken.getValueStr(), resp);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public void checkToken() {}
+    public void checkToken() {
+    }
 
     @PostMapping("/refresh")
     public void reIssueToken(@CookieValue("refreshToken") Cookie refreshToken,
