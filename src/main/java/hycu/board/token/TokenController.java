@@ -38,6 +38,22 @@ public class TokenController {
         configTokenCookies(tokens[0], tokens[1], resp);
     }
 
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeTokens(@CookieValue(value = "refreshToken", required = false) Cookie refreshToken,
+                             @CookieValue(value = "token", required = false) Cookie accessToken,
+                             HttpServletResponse resp) {
+        if (refreshToken != null) {
+            refreshToken.setMaxAge(0);
+            resp.addCookie(refreshToken);
+            tokenSvc.removeToken(refreshToken.getValue());
+        }
+        if (accessToken != null) {
+            accessToken.setMaxAge(0);
+            resp.addCookie(accessToken);
+        }
+    }
+
     private static void configTokenCookies(String token, String refreshToken, HttpServletResponse resp) {
         Cookie cookie = makeSecuredCookie("token", token, REFRESH_EXPIRY_SEC);
         cookie.setHttpOnly(false);

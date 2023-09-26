@@ -81,5 +81,8 @@ public class TokenSvc {
         String token = generateToken(jwt.getClaimAsString("rls"), jwt.getSubject(), refreshToken);
         return new String[] {token, refreshToken.getValueStr()};
     }
+
+    public void removeToken(String refreshToken) {
+        refreshTokenRepo.deleteByValue(refreshToken);
     }
 }
