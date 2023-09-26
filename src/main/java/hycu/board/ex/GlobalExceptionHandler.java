@@ -30,11 +30,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpClientErrorException.class)
     public Object handleHttpClientErrorException(HttpClientErrorException e) {
-        Object response = SerializationUtils.deserialize(e.getResponseBodyAsByteArray());
-        if (response == null)
+        byte[] bytes = e.getResponseBodyAsByteArray();
+        if (bytes.length == 0)
             return new ResponseEntity<>(e.getMessage().split(" ", 2)[1], e.getStatusCode());
-        else
-            return new ResponseEntity<>(response, e.getStatusCode());
+        else {
+            try {
+                Object response = SerializationUtils.deserialize(bytes);
+                return new ResponseEntity<>(response, e.getStatusCode());
+            } catch (Exception ex) {
+                return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+            }
+        }
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
