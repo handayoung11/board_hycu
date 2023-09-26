@@ -23,7 +23,6 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
-import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
@@ -45,7 +44,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        RequestMatcher[] matchers = new RequestMatcher[] {
+        RequestMatcher[] matchers = new RequestMatcher[]{
                 new AntPathRequestMatcher("/post", "GET"),
                 new AntPathRequestMatcher("/post/{postId}", "GET"),
                 new AntPathRequestMatcher("/token/refresh", "POST"),
@@ -62,11 +61,11 @@ public class SecurityConfig {
                         csrf.ignoringRequestMatchers(new AntPathRequestMatcher("/token", "POST"))
                                 .ignoringRequestMatchers(matchers)
                 )
-                .httpBasic(hc -> hc.authenticationEntryPoint(authenticationEntryPoint()))
-                .oauth2ResourceServer(o -> o.jwt(Customizer.withDefaults()))
+                .httpBasic(hc -> hc.authenticationEntryPoint(basicAuthEntryPoint()))
+                .oauth2ResourceServer(o -> o.jwt(Customizer.withDefaults()).authenticationEntryPoint(bearerAuthEntryPoint()))
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling((exceptions) -> exceptions
-                        .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+                        .authenticationEntryPoint(bearerAuthEntryPoint())
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
                 );
 
@@ -74,8 +73,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationEntryPoint authenticationEntryPoint() {
+    public AuthenticationEntryPoint basicAuthEntryPoint() {
         return new HttpBasicAuthEntryPoint();
+    }
+
+    @Bean
+    public AuthenticationEntryPoint bearerAuthEntryPoint() {
+        return new BearerAuthEntryPoint();
     }
 
     @Bean
