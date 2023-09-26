@@ -3,6 +3,7 @@ package hycu.board.ex;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.util.SerializationUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -29,7 +30,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpClientErrorException.class)
     public Object handleHttpClientErrorException(HttpClientErrorException e) {
-        return new ResponseEntity<>(e.getMessage().split(" ", 2)[1], e.getStatusCode());
+        Object response = SerializationUtils.deserialize(e.getResponseBodyAsByteArray());
+        if (response == null)
+            return new ResponseEntity<>(e.getMessage().split(" ", 2)[1], e.getStatusCode());
+        else
+            return new ResponseEntity<>(response, e.getStatusCode());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

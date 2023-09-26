@@ -1,5 +1,6 @@
 package hycu.board.token;
 
+import hycu.board.ex.LogoutErrRes;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import java.security.interfaces.RSAPublicKey;
 import java.time.Instant;
 import java.util.stream.Collectors;
+
+import static hycu.board.utils.ExUtils.makeHttpClientErrorEx;
 
 @Service
 public class TokenSvc {
@@ -56,16 +59,22 @@ public class TokenSvc {
 
     @Transactional
     public String[] reIssueToken(String refreshTokenVal, String accessToken) {
-        Jwt jwt = jwtDecoder.decode(accessToken);
+        Jwt jwt;
+        try {
+            jwt = jwtDecoder.decode(accessToken);
+        } catch (JwtException e) {
+            throw makeHttpClientErrorEx(HttpStatus.UNAUTHORIZED, new LogoutErrRes("jwt is not valid"));
+        }
+
         if (!jwtValidator.validate(jwt).hasErrors()) {
             throw new HttpClientErrorException(HttpStatus.UNPROCESSABLE_ENTITY, "jwt is valid");
         }
 
         String jti = jwt.getClaimAsString("jti");
         RefreshToken refreshToken = refreshTokenRepo.findByValueAndJti(refreshTokenVal.replaceAll("-", ""), jti)
-                .orElseThrow(() -> new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "refreshToken is not valid"));
+                .orElseThrow(() -> makeHttpClientErrorEx(HttpStatus.UNAUTHORIZED, new LogoutErrRes("refreshToken is not valid")));
         if (refreshToken.isExpired()) {
-            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "refreshtoken is expired");
+            throw makeHttpClientErrorEx(HttpStatus.UNAUTHORIZED, new LogoutErrRes("refreshtoken is expired"));
         }
 
         refreshToken.generate();
