@@ -6,8 +6,8 @@ import java.io.Serializable;
 
 @Getter
 public class LogoutErrRes implements Serializable {
-    private String msg;
-    private boolean doLogout = true;
+    private final String msg;
+    private final boolean doLogout = true;
 
     public LogoutErrRes(String msg) {
         this.msg = msg;
