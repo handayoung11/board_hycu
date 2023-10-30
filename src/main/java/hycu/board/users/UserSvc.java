@@ -12,4 +12,8 @@ public class UserSvc {
     public boolean checkMailDuplication(String mail) {
         return userRepo.findByEmailOrLoginId(mail, mail).isPresent();
     }
+
+    public boolean checkNicknameDuplication(String nickname) {
+        return userRepo.findByNickname(nickname).isPresent();
+    }
 }

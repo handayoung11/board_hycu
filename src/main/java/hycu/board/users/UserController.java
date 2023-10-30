@@ -17,4 +17,9 @@ public class UserController {
     public boolean checkMail(@PathVariable String mail) {
         return !userSvc.checkMailDuplication(mail);
     }
+
+    @GetMapping("/nickname/{nickname}")
+    public boolean checkNickname(@PathVariable String nickname) {
+        return !userSvc.checkNicknameDuplication(nickname);
+    }
 }

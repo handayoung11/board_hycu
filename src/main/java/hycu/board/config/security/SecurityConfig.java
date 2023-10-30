@@ -50,6 +50,7 @@ public class SecurityConfig {
                 new AntPathRequestMatcher("/post/{postId}", "GET"),
                 new AntPathRequestMatcher("/token/refresh", "POST"),
                 new AntPathRequestMatcher("/user/mail/{mail}", "GET"),
+                new AntPathRequestMatcher("/user/nickname/{nickname}", "GET"),
         };
 
         http
