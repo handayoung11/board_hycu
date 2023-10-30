@@ -49,6 +49,7 @@ public class SecurityConfig {
                 new AntPathRequestMatcher("/token", "DELETE"),
                 new AntPathRequestMatcher("/post/{postId}", "GET"),
                 new AntPathRequestMatcher("/token/refresh", "POST"),
+                new AntPathRequestMatcher("/user/mail/{mail}", "GET"),
         };
 
         http
