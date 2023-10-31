@@ -1,10 +1,10 @@
 package hycu.board.users;
 
+import hycu.board.users.dto.SignUpReqDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -21,5 +21,11 @@ public class UserController {
     @GetMapping("/nickname/{nickname}")
     public boolean checkNickname(@PathVariable String nickname) {
         return !userSvc.checkNicknameDuplication(nickname);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void signUp(@RequestBody @Valid SignUpReqDTO dto) {
+        userSvc.signUp(dto);
     }
 }
