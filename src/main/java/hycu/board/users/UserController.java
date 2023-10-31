@@ -1,6 +1,8 @@
 package hycu.board.users;
 
+import hycu.board.users.dto.MyInfoResDTO;
 import hycu.board.users.dto.SignUpReqDTO;
+import hycu.board.utils.SecurityUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,5 +29,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public void signUp(@RequestBody @Valid SignUpReqDTO dto) {
         userSvc.signUp(dto);
+    }
+
+    @GetMapping("me")
+    public MyInfoResDTO getMyInfo() {
+        Long id = SecurityUtils.getId();
+        return userSvc.getUser(id);
     }
 }

@@ -1,5 +1,6 @@
 package hycu.board.users;
 
+import hycu.board.users.dto.MyInfoResDTO;
 import hycu.board.users.dto.SignUpReqDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -31,5 +32,10 @@ public class UserSvc {
         } catch (DataIntegrityViolationException e) {
             throw new HttpClientErrorException(HttpStatus.UNPROCESSABLE_ENTITY, "이메일이나 닉네임을 다시 확인해주세요.");
         }
+    }
+
+    public MyInfoResDTO getUser(Long id) {
+        Users u = userRepo.findById(id).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "잘못된 계정입니다. 로그아웃 후 다시 시도해주세요."));
+        return new MyInfoResDTO(u);
     }
 }
