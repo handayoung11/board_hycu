@@ -2,11 +2,11 @@ package hycu.board.post;
 
 import hycu.board.post.dto.PostDetailResDTO;
 import hycu.board.post.dto.PostResDTO;
+import hycu.board.post.dto.WritePostReqDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,5 +25,11 @@ public class PostController {
     @GetMapping("{postId}")
     public PostDetailResDTO getPostDetail(@PathVariable long postId) {
         return postService.getPost(postId);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createPost(@RequestBody @Valid WritePostReqDTO dto) {
+        postService.createPost(dto);
     }
 }

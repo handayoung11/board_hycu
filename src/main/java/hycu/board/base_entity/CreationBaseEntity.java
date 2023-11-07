@@ -16,7 +16,7 @@ public abstract class CreationBaseEntity {
 
     @JoinColumn(name = "creator")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Users creator;
+    protected Users creator;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

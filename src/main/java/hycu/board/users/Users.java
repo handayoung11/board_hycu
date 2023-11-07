@@ -40,4 +40,10 @@ public class Users {
         u.nickname = dto.getNickname();
         return u;
     }
+
+    public static Users createProxy(Long id) {
+        Users u = new Users();
+        u.id = id;
+        return u;
+    }
 }
