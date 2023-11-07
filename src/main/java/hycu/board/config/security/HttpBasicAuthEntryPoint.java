@@ -14,8 +14,7 @@ public class HttpBasicAuthEntryPoint implements AuthenticationEntryPoint {
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write("아이디나 패스워드가 잘못되었습니다.");
 
-        //TODO origin port yml 설정 처리
-        String origin = request.getScheme() + "://" + request.getServerName() + ":3000";
+        String origin = request.getHeader("origin");
         response.setStatus(400);
         response.addHeader("Content-Type", "text/plain");
         response.addHeader("Access-Control-Allow-Origin", origin);

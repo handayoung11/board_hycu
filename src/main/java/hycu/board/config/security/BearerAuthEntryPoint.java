@@ -16,10 +16,9 @@ public class BearerAuthEntryPoint implements AuthenticationEntryPoint {
             response.getWriter().write("EXP");
         }
 
-        String origin = request.getScheme() + "://" + request.getServerName() + ":3000";
+        String origin = request.getHeader("origin");
         response.setStatus(401);
         response.setHeader("Access-Control-Allow-Origin", origin);
         response.addHeader("Access-Control-Allow-Credentials", "true");
     }
 }
-

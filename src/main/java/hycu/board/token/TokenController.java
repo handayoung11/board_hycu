@@ -19,10 +19,11 @@ public class TokenController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void token(Authentication auth, HttpServletResponse resp) {
+    public String token(Authentication auth, HttpServletResponse resp) {
         RefreshToken refreshToken = tokenSvc.generateRefreshToken();
         String token = tokenSvc.generateToken(auth, refreshToken);
         configTokenCookies(token, refreshToken.getValueStr(), resp);
+        return token;
     }
 
     @GetMapping
@@ -31,11 +32,12 @@ public class TokenController {
     }
 
     @PostMapping("/refresh")
-    public void reIssueToken(@CookieValue("refreshToken") Cookie refreshToken,
+    public String reIssueToken(@CookieValue("refreshToken") Cookie refreshToken,
                              @CookieValue("token") Cookie accessToken,
                              HttpServletResponse resp) {
         String[] tokens = tokenSvc.reIssueToken(refreshToken.getValue(), accessToken.getValue());
         configTokenCookies(tokens[0], tokens[1], resp);
+        return tokens[0];
     }
 
     @DeleteMapping
