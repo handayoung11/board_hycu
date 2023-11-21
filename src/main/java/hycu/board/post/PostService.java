@@ -34,4 +34,12 @@ public class PostService {
     public void createPost(WritePostReqDTO dto) {
         postRepo.save(Post.createPost(dto, Users.createProxy(SecurityUtils.getId())));
     }
+
+    public void deletePost(long postId) {
+        Post post = postRepo.findById(postId).orElse(null);
+        if (post == null) return;
+
+        if (post.getCreator().getId().equals(SecurityUtils.getId())) postRepo.delete(post);
+        else throw new HttpClientErrorException(HttpStatus.FORBIDDEN, "글 작성자가 아닙니다.");
+    }
 }

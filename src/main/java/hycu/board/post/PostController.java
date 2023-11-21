@@ -32,4 +32,10 @@ public class PostController {
     public void createPost(@RequestBody @Valid WritePostReqDTO dto) {
         postService.createPost(dto);
     }
+
+    @DeleteMapping("{postId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePost(@PathVariable long postId) {
+        postService.deletePost(postId);
+    }
 }
