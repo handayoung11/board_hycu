@@ -21,7 +21,7 @@ public class PostDslRepoImpl implements PostDslRepo {
     private final JPAQueryFactory factory;
 
     @Override
-    public List<PostResDTO> findWithCreator() {
+    public List<PostResDTO> findActivePosts() {
         JPAQuery<PostResDTO> select = factory.select(Projections.constructor(PostResDTO.class, post, likes.likeKey.user.count(), reply.count()));
         return getBaseQuery(select)
                 .leftJoin(reply).on(reply.post.eq(post))

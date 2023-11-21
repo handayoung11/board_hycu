@@ -21,7 +21,7 @@ public class PostService {
     private final ReplyRepo replyRepo;
 
     public List<PostResDTO> getPosts() {
-        return postRepo.findWithCreator();
+        return postRepo.findActivePosts();
     }
 
     public PostDetailResDTO getPost(long postId) {
