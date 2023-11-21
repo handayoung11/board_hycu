@@ -18,7 +18,7 @@ public class HttpBasicAuthEntryPoint implements AuthenticationEntryPoint {
         response.setStatus(400);
         response.addHeader("Content-Type", "text/plain");
         response.addHeader("Access-Control-Allow-Origin", origin);
-        response.addHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
     }
 }
 
