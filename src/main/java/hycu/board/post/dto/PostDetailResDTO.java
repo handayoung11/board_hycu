@@ -3,6 +3,7 @@ package hycu.board.post.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import hycu.board.post.Post;
 import hycu.board.reply.Reply;
+import hycu.board.users.Users;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ public class PostDetailResDTO {
     String title;
     String content;
     long like;
-    String user;
+    CreatorDTO creator;
     List<ReplyDTO> comments;
 
     @JsonProperty("time_ago")
@@ -26,7 +27,7 @@ public class PostDetailResDTO {
         title = post.getTitle();
         content = post.getContents();
         this.like = like;
-        this.user = post.getCreator().getNickname();
+        this.creator = new CreatorDTO(post.getCreator());
         timeAgo = post.getCreatedAt();
     }
 
@@ -49,6 +50,17 @@ public class PostDetailResDTO {
             content = r.getContents();
             user = r.getCreator().getNickname();
             timeAgo = r.getCreatedAt();
+        }
+    }
+
+    @Getter
+    private class CreatorDTO {
+        long id;
+        String nickname;
+
+        public CreatorDTO(Users user) {
+            id = user.getId();
+            nickname = user.getNickname();
         }
     }
 }
