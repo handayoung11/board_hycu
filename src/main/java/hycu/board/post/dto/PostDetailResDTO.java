@@ -16,6 +16,7 @@ public class PostDetailResDTO {
     String title;
     String content;
     long like;
+    boolean clickLike = false;
     CreatorDTO creator;
     List<ReplyDTO> comments;
 
@@ -33,6 +34,10 @@ public class PostDetailResDTO {
 
     public void configComments(List<Reply> replies) {
         comments = replies.stream().map(ReplyDTO::new).toList();
+    }
+
+    public void updateClickLike() {
+        clickLike = true;
     }
 
     @Getter

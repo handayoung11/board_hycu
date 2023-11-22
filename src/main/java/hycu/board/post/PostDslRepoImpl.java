@@ -5,6 +5,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import hycu.board.like.Likes;
 import hycu.board.post.dto.PostDetailResDTO;
 import hycu.board.post.dto.PostResDTO;
 import lombok.RequiredArgsConstructor;
@@ -41,18 +42,25 @@ public class PostDslRepoImpl implements PostDslRepo {
         Map<Long, Long> map = commentCount.stream()
                 .collect(Collectors.toMap(t -> t.get(post.id), t -> t.get(reply.count())));
         for (PostResDTO p : posts) p.updateCommentsCount(map.get(p.getId()));
-        
+
         return posts;
     }
 
     @Override
-    public Optional<PostDetailResDTO> findDetailById(long postId) {
+    public Optional<PostDetailResDTO> findDetailById(long postId, long loggerId) {
         PostDetailResDTO dto = null;
         try {
-            JPAQuery<PostDetailResDTO> select = factory.select(Projections.constructor(PostDetailResDTO.class, post, likes.likeKey.user.count(), likes.likeKey.user));
+            JPAQuery<PostDetailResDTO> select = factory.select(Projections.constructor(PostDetailResDTO.class, post, likes.likeKey.user.count()));
             dto = getBaseQuery(select)
                     .where(activeIsTrue().and(post.id.eq(postId)))
                     .fetchOne();
+
+            Likes l = factory.selectFrom(likes)
+                    .where(likes.likeKey.user.id.eq(loggerId)
+                            .and(likes.likeKey.post.id.eq(dto.getId())))
+                    .fetchOne();
+            if (l != null) dto.updateClickLike();
+
         } catch (Exception e) {
             e.fillInStackTrace();
         }

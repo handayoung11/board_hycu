@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface PostDslRepo {
     List<PostResDTO> findActivePosts();
-    Optional<PostDetailResDTO> findDetailById(long postId);
+    Optional<PostDetailResDTO> findDetailById(long postId, long loggerId);
 }

@@ -27,7 +27,7 @@ public class PostService {
     }
 
     public PostDetailResDTO getPost(long postId) {
-        PostDetailResDTO dto = postRepo.findDetailById(postId)
+        PostDetailResDTO dto = postRepo.findDetailById(postId, SecurityUtils.getIdWithoutEx())
                 .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "존재하지 않거나 삭제된 게시글입니다."));
         dto.configComments(replyRepo.findWithCreatorByPostIdOrderByCreatedAtDesc(postId));
         return dto;
@@ -51,7 +51,7 @@ public class PostService {
         Post post = postRepo.findById(postId).orElse(null);
         if (post == null) return;
 
-        if (post.getCreator().getId().equals(SecurityUtils.getId())) postRepo.delete(post);
+        if (post.getCreator().getId().equals(SecurityUtils.getIdWithoutEx())) postRepo.delete(post);
         else throw new HttpClientErrorException(HttpStatus.FORBIDDEN, "글 작성자가 아닙니다.");
     }
 }
