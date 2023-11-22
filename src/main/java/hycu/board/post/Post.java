@@ -1,6 +1,7 @@
 package hycu.board.post;
 
 import hycu.board.base_entity.CreationBaseEntity;
+import hycu.board.post.dto.UpdatePostReqDTO;
 import hycu.board.post.dto.WritePostReqDTO;
 import hycu.board.users.Users;
 import jakarta.persistence.*;
@@ -27,5 +28,10 @@ public class Post extends CreationBaseEntity {
         p.active = true;
         p.creator = creator;
         return p;
+    }
+
+    public void update(UpdatePostReqDTO dto) {
+        this.title = dto.getTitle();
+        this.contents = dto.getContents();
     }
 }

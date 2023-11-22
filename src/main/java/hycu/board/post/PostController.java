@@ -2,6 +2,7 @@ package hycu.board.post;
 
 import hycu.board.post.dto.PostDetailResDTO;
 import hycu.board.post.dto.PostResDTO;
+import hycu.board.post.dto.UpdatePostReqDTO;
 import hycu.board.post.dto.WritePostReqDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,12 @@ public class PostController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createPost(@RequestBody @Valid WritePostReqDTO dto) {
         postService.createPost(dto);
+    }
+
+    @PatchMapping("{postId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updatePost(@RequestBody @Valid UpdatePostReqDTO dto, @PathVariable Long postId) {
+        postService.updatePost(postId, dto);
     }
 
     @DeleteMapping("{postId}")

@@ -12,6 +12,7 @@ public class CookieUtils {
         cookie.setSecure(secured);
         cookie.setPath("/");
         cookie.setAttribute("SameSite", "none");
+        cookie.setAttribute("Partitioned", "");
         return cookie;
     }
 }
