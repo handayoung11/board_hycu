@@ -1,5 +1,6 @@
 package hycu.board.post;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -9,7 +10,9 @@ import hycu.board.post.dto.PostResDTO;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static hycu.board.like.QLikes.likes;
 import static hycu.board.post.QPost.post;
@@ -22,23 +25,35 @@ public class PostDslRepoImpl implements PostDslRepo {
 
     @Override
     public List<PostResDTO> findActivePosts() {
-        JPAQuery<PostResDTO> select = factory.select(Projections.constructor(PostResDTO.class, post, likes.likeKey.user.count(), reply.count()));
-        return getBaseQuery(select)
-                .leftJoin(reply).on(reply.post.eq(post))
+        JPAQuery<PostResDTO> select = factory.select(Projections.constructor(PostResDTO.class, post, likes.likeKey.user.count()));
+        List<PostResDTO> posts = getBaseQuery(select)
                 .groupBy(post.id)
                 .orderBy(post.createdAt.desc())
                 .where(activeIsTrue()).fetch();
+
+        List<Tuple> commentCount = factory.select(post.id, reply.count())
+                .from(post)
+                .leftJoin(reply).on(post.eq(reply.post))
+                .orderBy(post.createdAt.desc())
+                .groupBy(post.id)
+                .where(activeIsTrue()).fetch();
+
+        Map<Long, Long> map = commentCount.stream()
+                .collect(Collectors.toMap(t -> t.get(post.id), t -> t.get(reply.count())));
+        for (PostResDTO p : posts) p.updateCommentsCount(map.get(p.getId()));
+        
+        return posts;
     }
 
     @Override
     public Optional<PostDetailResDTO> findDetailById(long postId) {
         PostDetailResDTO dto = null;
         try {
-            JPAQuery<PostDetailResDTO> select = factory.select(Projections.constructor(PostDetailResDTO.class, post, likes.likeKey.user.count()));
+            JPAQuery<PostDetailResDTO> select = factory.select(Projections.constructor(PostDetailResDTO.class, post, likes.likeKey.user.count(), likes.likeKey.user));
             dto = getBaseQuery(select)
                     .where(activeIsTrue().and(post.id.eq(postId)))
                     .fetchOne();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.fillInStackTrace();
         }
         return Optional.ofNullable(dto);
@@ -52,5 +67,10 @@ public class PostDslRepoImpl implements PostDslRepo {
         return select.from(post)
                 .leftJoin(post.creator).fetchJoin()
                 .leftJoin(likes).on(likes.likeKey.post.eq(post));
+    }
+
+    private class CommentCount {
+        long postId;
+        long commentCount;
     }
 }
