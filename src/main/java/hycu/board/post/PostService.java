@@ -47,11 +47,12 @@ public class PostService {
         post.update(dto);
     }
 
+    @Transactional
     public void deletePost(long postId) {
         Post post = postRepo.findById(postId).orElse(null);
         if (post == null) return;
 
-        if (post.getCreator().getId().equals(SecurityUtils.getIdWithoutEx())) postRepo.delete(post);
+        if (post.getCreator().getId().equals(SecurityUtils.getIdWithoutEx())) post.delete();
         else throw new HttpClientErrorException(HttpStatus.FORBIDDEN, "글 작성자가 아닙니다.");
     }
 }

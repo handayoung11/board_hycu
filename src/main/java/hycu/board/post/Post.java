@@ -34,4 +34,8 @@ public class Post extends CreationBaseEntity {
         this.title = dto.getTitle();
         this.contents = dto.getContents();
     }
+
+    public void delete() {
+        this.active = false;
+    }
 }
