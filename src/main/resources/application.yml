@@ -4,8 +4,8 @@ spring:
 
   datasource:
     url: jdbc:mysql://refillcycle.com:3306/hycu_board
-    username: root
-    password: ENC(cyK4lgvriUCDOcntCa6ebpjYPFnMdWLd5Nx4yILVMoE=)
+    username: hycu_admin
+    password: ENC(wrWooOEFc0uI3iX7xnMSBJmmee3WF5+g)
     driver-class-name: com.mysql.jdbc.Driver
 
   jpa:

@@ -76,9 +76,4 @@ public class PostDslRepoImpl implements PostDslRepo {
                 .leftJoin(post.creator).fetchJoin()
                 .leftJoin(likes).on(likes.likeKey.post.eq(post));
     }
-
-    private class CommentCount {
-        long postId;
-        long commentCount;
-    }
 }

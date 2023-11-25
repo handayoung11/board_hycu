@@ -13,4 +13,8 @@ public class Likes {
 
     @EmbeddedId
     LikeKey likeKey;
+
+    public Likes(LikeKey likeKey) {
+        this.likeKey = likeKey;
+    }
 }
