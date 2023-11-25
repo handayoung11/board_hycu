@@ -2,6 +2,7 @@ package hycu.board.reply;
 
 import hycu.board.base_entity.CreationBaseEntity;
 import hycu.board.post.Post;
+import hycu.board.users.Users;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,4 +20,10 @@ public class Reply extends CreationBaseEntity {
     private Post post;
 
     String contents;
+
+    public Reply(Post post, String contents, Users creator) {
+        this.post = post;
+        this.contents = contents;
+        this.creator = creator;
+    }
 }
