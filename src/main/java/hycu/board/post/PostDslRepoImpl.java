@@ -1,15 +1,18 @@
 package hycu.board.post;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hycu.board.like.Likes;
 import hycu.board.post.dto.PostDetailResDTO;
+import hycu.board.post.dto.PostOrderBy;
 import hycu.board.post.dto.PostResDTO;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -25,11 +28,16 @@ public class PostDslRepoImpl implements PostDslRepo {
     private final JPAQueryFactory factory;
 
     @Override
-    public List<PostResDTO> findActivePosts() {
+    public List<PostResDTO> findActivePosts(PostOrderBy o) {
         JPAQuery<PostResDTO> select = factory.select(Projections.constructor(PostResDTO.class, post, likes.likeKey.user.count()));
+
+        List<OrderSpecifier<?>> orders = new ArrayList<>();
+        if (o == PostOrderBy.P) orders.add(likes.likeKey.user.count().desc());
+        orders.add(post.createdAt.desc());
+
         List<PostResDTO> posts = getBaseQuery(select)
                 .groupBy(post.id)
-                .orderBy(post.createdAt.desc())
+                .orderBy(orders.toArray(OrderSpecifier[]::new))
                 .where(activeIsTrue()).fetch();
 
         List<Tuple> commentCount = factory.select(post.id, reply.count())

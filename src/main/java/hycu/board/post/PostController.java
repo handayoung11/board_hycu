@@ -1,9 +1,6 @@
 package hycu.board.post;
 
-import hycu.board.post.dto.PostDetailResDTO;
-import hycu.board.post.dto.PostResDTO;
-import hycu.board.post.dto.UpdatePostReqDTO;
-import hycu.board.post.dto.WritePostReqDTO;
+import hycu.board.post.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,8 +16,8 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping
-    public List<PostResDTO> getPosts() {
-        return postService.getPosts();
+    public List<PostResDTO> getPosts(@RequestParam(required = false, defaultValue = "T") PostOrderBy orderBy) {
+        return postService.getPosts(orderBy);
     }
 
     @GetMapping("{postId}")

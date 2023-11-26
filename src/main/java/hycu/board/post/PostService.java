@@ -1,9 +1,6 @@
 package hycu.board.post;
 
-import hycu.board.post.dto.PostDetailResDTO;
-import hycu.board.post.dto.PostResDTO;
-import hycu.board.post.dto.UpdatePostReqDTO;
-import hycu.board.post.dto.WritePostReqDTO;
+import hycu.board.post.dto.*;
 import hycu.board.reply.ReplyRepo;
 import hycu.board.users.Users;
 import hycu.board.utils.SecurityUtils;
@@ -22,8 +19,8 @@ public class PostService {
     private final PostRepo postRepo;
     private final ReplyRepo replyRepo;
 
-    public List<PostResDTO> getPosts() {
-        return postRepo.findActivePosts();
+    public List<PostResDTO> getPosts(PostOrderBy o) {
+        return postRepo.findActivePosts(o);
     }
 
     public PostDetailResDTO getPost(long postId) {
