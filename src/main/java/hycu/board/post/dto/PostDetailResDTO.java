@@ -45,7 +45,7 @@ public class PostDetailResDTO {
         long id;
         String content;
         int level = 0;
-        String user;
+        CreatorDTO creator;
 
         @JsonProperty("time_ago")
         LocalDateTime timeAgo;
@@ -53,7 +53,7 @@ public class PostDetailResDTO {
         public ReplyDTO(Reply r) {
             id = r.getId();
             content = r.getContents();
-            user = r.getCreator().getNickname();
+            creator = new CreatorDTO(r.getCreator());
             timeAgo = r.getCreatedAt();
         }
     }

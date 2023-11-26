@@ -1,5 +1,6 @@
 package hycu.board.reply;
 
+import hycu.board.reply.dto.UpdateReplyReqDTO;
 import hycu.board.reply.dto.WriteReplyReqDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,19 @@ public class ReplyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void likeOrUnlikePost(@RequestBody WriteReplyReqDTO dto) {
-        replySvc.write(dto);
+    public void writeReply(@RequestBody WriteReplyReqDTO dto) {
+        replySvc.writeReply(dto);
+    }
+
+    @DeleteMapping("{replyId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteReply(@PathVariable long replyId) {
+        replySvc.deleteReply(replyId);
+    }
+
+    @PostMapping("{replyId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateReply(@PathVariable long replyId, @RequestBody UpdateReplyReqDTO dto) {
+        replySvc.updateReply(replyId, dto.getContents());
     }
 }

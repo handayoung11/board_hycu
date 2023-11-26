@@ -26,4 +26,8 @@ public class Reply extends CreationBaseEntity {
         this.contents = contents;
         this.creator = creator;
     }
+
+    public void updateContents(String contents) {
+        this.contents = contents;
+    }
 }
